@@ -1,0 +1,769 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|consolas:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="ObserverPattern（观察者模式）
+当对象间存在一对多关系时，则使用观察者模式（Observer Pattern）。比如，当一个对象被修改时，则会自动通知它的依赖对象。观察者模式属于行为型模式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ObserverPattern-观察者模式">
+<meta property="og:url" content="http://jslancer.top/2016/10/01/ObserverPattern-观察者模式/index.html">
+<meta property="og:site_name" content="jsLancer的博客">
+<meta property="og:description" content="ObserverPattern（观察者模式）
+当对象间存在一对多关系时，则使用观察者模式（Observer Pattern）。比如，当一个对象被修改时，则会自动通知它的依赖对象。观察者模式属于行为型模式。">
+<meta property="og:updated_time" content="2017-02-06T11:59:41.708Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ObserverPattern-观察者模式">
+<meta name="twitter:description" content="ObserverPattern（观察者模式）
+当对象间存在一对多关系时，则使用观察者模式（Observer Pattern）。比如，当一个对象被修改时，则会自动通知它的依赖对象。观察者模式属于行为型模式。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jslancer.top/2016/10/01/ObserverPattern-观察者模式/"/>
+
+
+
+
+
+  <title> ObserverPattern-观察者模式 | jsLancer的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">jsLancer的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">笔记分享</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://jslancer.top/2016/10/01/ObserverPattern-观察者模式/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="光与风与梦">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="jsLancer的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="jsLancer的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ObserverPattern-观察者模式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-01T18:57:08+08:00">
+                2016-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DesignPattern/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/10/01/ObserverPattern-观察者模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/01/ObserverPattern-观察者模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="ObserverPattern（观察者模式）"><a href="#ObserverPattern（观察者模式）" class="headerlink" title="ObserverPattern（观察者模式）"></a>ObserverPattern（观察者模式）</h3><hr>
+<p>当对象间存在一对多关系时，则使用观察者模式（Observer Pattern）。<br>比如，当一个对象被修改时，则会自动通知它的依赖对象。观察者模式属于行为型模式。</p>
+<a id="more"></a>
+<ul>
+<li>意图：定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，<br>  所有依赖于它的对象都得到通知并被自动更新。</li>
+<li>主要解决：一个对象状态改变给其他对象通知的问题，而且要考虑到易用和低耦合，保证高度的协作。</li>
+<li>何时使用：一个对象（目标对象）的状态发生改变，所有的依赖对象（观察者对象）都将得到通知，进行广播通知。</li>
+<li>如何解决：使用面向对象技术，可以将这种依赖关系弱化。</li>
+<li>关键代码：在抽象类里有一个 ArrayList 存放观察者们。</li>
+<li>应用实例： </li>
+<li>1.拍卖的时候，拍卖师观察最高标价，然后通知给其他竞价者竞价。<br>2.西游记里面悟空请求菩萨降服红孩儿，菩萨洒了一地水招来一个老乌龟，<br>这个乌龟就是观察者，他观察菩萨洒水这个动作。</li>
+<li>优点： </li>
+<li><ol>
+<li>观察者和被观察者是抽象耦合的。 </li>
+<li>建立一套触发机制。</li>
+</ol>
+</li>
+<li>缺点： </li>
+<li><ol>
+<li>如果一个被观察者对象有很多的直接和间接的观察者的话，将所有的观察者都通知到会花费很多时间。</li>
+<li>如果在观察者和观察目标之间有循环依赖的话，观察目标会触发它们之间进行循环调用，可能导致系统崩溃。<br>3.观察者模式没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的，而仅仅只是知道观察目标发生了变化。</li>
+</ol>
+</li>
+<li>使用场景： </li>
+<li><ol>
+<li>有多个子类共有的方法，且逻辑相同。 </li>
+<li>重要的、复杂的方法，可以考虑作为模板方法。</li>
+</ol>
+</li>
+<li>注意事项： </li>
+<li><ol>
+<li>JAVA 中已经有了对观察者模式的支持类。<br>2.避免循环引用。<br>3.如果顺序执行，某一观察者错误会导致系统卡壳，一般采用异步方式。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>推模型：假定目标对象知道观察者所需数据，直接传入对应数据</p>
+<p>拉模型：目标对象不知道观察者具体需要什么数据，因此把自身传给观察者，由观察者调用相应数据</p>
+</blockquote>
+<p>Java 默认提供</p>
+<ul>
+<li><p>观察者接口 ==Observer==  java.util.Observer</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public void update(Observable o, Object arg)</div><div class="line">notifyObservers();   arg = null</div><div class="line">notifyObservers(Object);  arg = Object</div></pre></td></tr></table></figure>
+</li>
+<li><p>被观察者接口  ==Observable==  java.util.Observable</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">在 Obserable 中通知观察者更新必须调用此方法</div><div class="line">this.setChanged();</div><div class="line">拉模式：默认将该对象引用传递过去</div><div class="line">this.notifyObservers();</div><div class="line">推模式：Object 即推送数据</div><div class="line">this.notifyObservers(Object);</div></pre></td></tr></table></figure>
+<p>被观察者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">import java.util.Observable;</div><div class="line"></div><div class="line">public class ContentSubject extends Observable &#123;</div><div class="line">	</div><div class="line">	private String content;</div><div class="line"></div><div class="line">	public String getContent() &#123;</div><div class="line">		return content;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setContent(String content) &#123;</div><div class="line">		this.content = content;</div><div class="line">		</div><div class="line">		//通知观察者更新必须调用此方法</div><div class="line">		this.setChanged();</div><div class="line">		//拉模式，实际将该对象引用传递过去</div><div class="line">		//this.notifyObservers();</div><div class="line">		//推模式</div><div class="line">		this.notifyObservers(content);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>观察者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class ContentObserver implements Observer &#123;</div><div class="line"></div><div class="line">	private String observerName;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public void update(Observable o, Object arg) &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line">		</div><div class="line">		System.out.println(observerName + &quot;推模式：&quot; + arg.toString());</div><div class="line">		System.out.println(observerName + &quot;拉模式：&quot; + ((ContentSubject)o).getContent());</div><div class="line">		</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public String getObserverName() &#123;</div><div class="line">		return observerName;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setObserverName(String observerName) &#123;</div><div class="line">		this.observerName = observerName;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line"></div><div class="line">		ContentSubject subject = new ContentSubject();</div><div class="line">		</div><div class="line">		ContentObserver observer1 = new ContentObserver();</div><div class="line">		observer1.setObserverName(&quot;观察者1&quot;);</div><div class="line">		ContentObserver observer2 = new ContentObserver();</div><div class="line">		observer2.setObserverName(&quot;观察者2&quot;);</div><div class="line">		</div><div class="line">		subject.addObserver(observer1);</div><div class="line">		subject.addObserver(observer2);</div><div class="line">		</div><div class="line">		subject.setContent(&quot;内容第一次更新&quot;);</div><div class="line">		subject.setContent(&quot;内容第二次更新&quot;);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>JDK源码</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface Observer &#123;</div><div class="line">    void update(Observable o, Object arg);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">public class Observable &#123;</div><div class="line">    private boolean changed = false;</div><div class="line">    private Vector&lt;Observer&gt; obs;</div><div class="line"></div><div class="line">    public Observable() &#123;</div><div class="line">        obs = new Vector&lt;&gt;();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public synchronized void addObserver(Observer o) &#123;</div><div class="line">        if (o == null)</div><div class="line">            throw new NullPointerException();</div><div class="line">        if (!obs.contains(o)) &#123;</div><div class="line">            obs.addElement(o);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public synchronized void deleteObserver(Observer o) &#123;</div><div class="line">        obs.removeElement(o);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void notifyObservers() &#123;</div><div class="line">        notifyObservers(null);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    public void notifyObservers(Object arg) &#123;</div><div class="line">        </div><div class="line">        Object[] arrLocal;</div><div class="line"></div><div class="line">        synchronized (this) &#123;</div><div class="line">            </div><div class="line">            if (!changed)</div><div class="line">                return;</div><div class="line">            arrLocal = obs.toArray();</div><div class="line">            clearChanged();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        for (int i = arrLocal.length-1; i&gt;=0; i--)</div><div class="line">            ((Observer)arrLocal[i]).update(this, arg);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    </div><div class="line">    public synchronized void deleteObservers() &#123;</div><div class="line">        obs.removeAllElements();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected synchronized void setChanged() &#123;</div><div class="line">        changed = true;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected synchronized void clearChanged() &#123;</div><div class="line">        changed = false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public synchronized boolean hasChanged() &#123;</div><div class="line">        return changed;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public synchronized int countObservers() &#123;</div><div class="line">        return obs.size();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>手动实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 目标</div><div class="line"> * 被观察对象</div><div class="line"> * @author Lancer</div><div class="line"> *</div><div class="line"> */</div><div class="line">interface Subject&#123;</div><div class="line">	void attach(Observer observer);</div><div class="line">	void notifyAllObservers();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class StateSubject implements Subject&#123;</div><div class="line">	private List&lt;Observer&gt; observers = new ArrayList&lt;Observer&gt;();</div><div class="line">	private int state;</div><div class="line">	</div><div class="line">	public int getState() &#123;</div><div class="line">		return this.state;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void setState(int state) &#123;</div><div class="line">		this.state = state;</div><div class="line">		//通知所有观察者</div><div class="line">		notifyAllObservers();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	//添加观察者</div><div class="line">	public void attach(Observer observer) &#123;</div><div class="line">		observers.add(observer);</div><div class="line">	&#125;</div><div class="line">	//通知所有观察者</div><div class="line">	//拉模型</div><div class="line">	public void notifyAllObservers() &#123;</div><div class="line">		for(Observer observer : observers)&#123;</div><div class="line">			observer.update(this);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">abstract class Observer &#123;</div><div class="line">	</div><div class="line">	public abstract void update(Subject subject);</div><div class="line">	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class BinaryObserver extends Observer &#123;</div><div class="line">	</div><div class="line">	public BinaryObserver(Subject subject) &#123;</div><div class="line">		subject.attach(this);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public void update(Subject subject) &#123;</div><div class="line">		System.out.println( &quot;Binary String: &quot; </div><div class="line">			      + Integer.toBinaryString( ((StateSubject)subject).getState() ) ); </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class OctalObserver extends Observer &#123;</div><div class="line">	public OctalObserver() &#123;</div><div class="line">		// TODO Auto-generated constructor stub</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public OctalObserver(Subject subject) &#123;</div><div class="line">		</div><div class="line">		subject.attach(this);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public void update(Subject subject) &#123;</div><div class="line">		System.out.println(&quot;Octal String: &quot; </div><div class="line">				+ Integer.toOctalString(((StateSubject)subject).getState()));</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class HexaObserver extends Observer &#123;</div><div class="line"></div><div class="line">	public HexaObserver(Subject subject) &#123;</div><div class="line">		</div><div class="line">		subject.attach(this);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public void update(Subject subject) &#123;</div><div class="line">		System.out.println( &quot;Hex String: &quot; </div><div class="line">			      + Integer.toHexString( ((StateSubject)subject).getState() ).toUpperCase() ); </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.png" alt="光与风与梦 WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/22/JSP/" rel="next" title="JSP">
+                <i class="fa fa-chevron-left"></i> JSP
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/02/Git笔记/" rel="prev" title="Git笔记">
+                Git笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/01/ObserverPattern-观察者模式/"
+           data-title="ObserverPattern-观察者模式" data-url="http://jslancer.top/2016/10/01/ObserverPattern-观察者模式/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.jpg"
+               alt="光与风与梦" />
+          <p class="site-author-name" itemprop="name">光与风与梦</p>
+          <p class="site-description motion-element" itemprop="description">年轻时不可止于温室，有梦想时不可止于饥寒。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ObserverPattern（观察者模式）"><span class="nav-number">1.</span> <span class="nav-text">ObserverPattern（观察者模式）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">光与风与梦</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jslancer"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

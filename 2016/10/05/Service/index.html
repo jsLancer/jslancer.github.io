@@ -1,0 +1,857 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|consolas:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="创建 Service定义一个继承 Service 的子类
+在 AndroidManifest.xml 文件中配置该 Service
+1234567891011121314IBinder onBind(Intent intent)	子类必须实现的方法，返回 IBinder 对象，可与 Service 组件通信void onCreate() 				该 Service 第一次被创建后立即回调void">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Service">
+<meta property="og:url" content="http://jslancer.top/2016/10/05/Service/index.html">
+<meta property="og:site_name" content="jsLancer的博客">
+<meta property="og:description" content="创建 Service定义一个继承 Service 的子类
+在 AndroidManifest.xml 文件中配置该 Service
+1234567891011121314IBinder onBind(Intent intent)	子类必须实现的方法，返回 IBinder 对象，可与 Service 组件通信void onCreate() 				该 Service 第一次被创建后立即回调void">
+<meta property="og:updated_time" content="2017-02-06T12:00:01.764Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Service">
+<meta name="twitter:description" content="创建 Service定义一个继承 Service 的子类
+在 AndroidManifest.xml 文件中配置该 Service
+1234567891011121314IBinder onBind(Intent intent)	子类必须实现的方法，返回 IBinder 对象，可与 Service 组件通信void onCreate() 				该 Service 第一次被创建后立即回调void">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jslancer.top/2016/10/05/Service/"/>
+
+
+
+
+
+  <title> Service | jsLancer的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">jsLancer的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">笔记分享</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://jslancer.top/2016/10/05/Service/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="光与风与梦">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="jsLancer的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="jsLancer的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Service
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-05T15:29:08+08:00">
+                2016-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/10/05/Service/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/05/Service/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="创建-Service"><a href="#创建-Service" class="headerlink" title="创建 Service"></a>创建 Service</h4><pre><code>定义一个继承 Service 的子类
+在 AndroidManifest.xml 文件中配置该 Service
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">IBinder onBind(Intent intent)	</div><div class="line">子类必须实现的方法，返回 IBinder 对象，可与 Service 组件通信</div><div class="line"></div><div class="line">void onCreate() 				</div><div class="line">该 Service 第一次被创建后立即回调</div><div class="line"></div><div class="line">void onDestroy()				</div><div class="line">该 Service 被关闭之前将会回调该方法</div><div class="line"></div><div class="line">void onStartCommand(Intent intent, int flags, int startId)</div><div class="line">客户端调用 startService(Intent)方法时回调该方法</div><div class="line"></div><div class="line">boolean onUnbind(Intent intent) </div><div class="line">当客户端调用 unBindService(ServiceConnection) 断开服务绑定时，回调该方法</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h4 id="运行-Service"><a href="#运行-Service" class="headerlink" title="运行 Service"></a>运行 Service</h4><pre><code>Context 的 startService() 方法
+            stopService()
+Context 的 bindService() 方法         
+            unBindService()
+</code></pre><h4 id="停止运行"><a href="#停止运行" class="headerlink" title="停止运行"></a>停止运行</h4><pre><code>自身调用 stopSelf() 方法
+其他组件调用 stopService() 方法时
+</code></pre><h5 id="绑定本地-Service"><a href="#绑定本地-Service" class="headerlink" title="绑定本地 Service"></a>绑定本地 Service</h5><pre><code>bindService(Intent service, ServiceConnection conn, int flags)
+    service : 通过 Intent 指定要启动的 Service
+    conn     : 一个 ServiceConnection 对象，用于监听访问者与 Service 连接情况
+              连接成功，回调 onServiceConnected(ComponentName name, IBinder service)方法
+              异常终止，断开连接，回调 onServiceDisconnected(ComponentName name, IBinder service)方法
+              service,即 onBind(Intent) 方法返回的 IBinder 对象
+              程序通过 IBinder 对象与 Service 通信
+    flags    : BIND_AUTO_CREATE  自动创建
+                0                 不自动创建
+
+开发中常在 Service 中通过继承 Binder(IBinder的实现类) 创建内部类
+在客户端实现 ServiceConnection 类及对象，通过 IBinder 对象访问 Service 内部数据，或调用相关方法
+
+当 Activity 调用 bindService() 绑定一个已启动 Service 时，系统只把 Service 内部对象 IBinder 对象传给
+Activity, 调用 unBindService() 取消与 Service 绑定时，只是切断 Activity 与 Service 关联，并不能停止该
+Service组件。
+</code></pre><h5 id="IntentService-Service-子类"><a href="#IntentService-Service-子类" class="headerlink" title="IntentService(Service 子类 )"></a>IntentService(Service 子类 )</h5><pre><code>IntentService 创建单独的 worker 线程来处理所有 Intent 请求
+IntentService 创建单独的 worker 线程来处理 onHandleIntent() 方法实现的代码，无需关注多线程
+所有请求处理完后，IntentService 会自动停止，无需调用 stopSelf() 来停止该 Service
+onBind() 返回 null, onStartCommand() 将请求 Intent 添加到队列中，方法提供默认实现
+</code></pre><p>将一个普通的Service转换成远程Service其实非常简单，只需要在注册Service的时候将<br>它的android:process属性指定成:remote就可以了<br>使用了远程Service后，Service已经在另外一个进程当中运行了，所以只会阻塞该进程中的主线程，<br>并不会影响到当前的应用程序。</p>
+<p>总结：</p>
+<p>StartService启动Service</p>
+<pre><code>通信使用 Intent
+
+1.首次启动会创建一个Service实例,依次调用onCreate()和onStartCommand()方法,此时Service 进入运行状态,
+如果再次调用StartService启动Service,将不会再创建新的Service对象, 系统会直接复用前面创建的Service对象,
+调用它的onStartCommand()方法！
+
+2.但这样的Service与它的调用者无必然的联系,就是说当调用者结束了自己的生命周期, 但是只要不调用stopService,
+那么Service还是会继续运行的!
+
+3.无论启动了多少次Service,只需调用一次stopService()即可停掉Service.
+</code></pre><p>BindService启动Service</p>
+<pre><code>通信使用 IBinder
+
+1.当首次使用bindService绑定一个Service时,系统会实例化一个Service实例,并调用其onCreate()和onBind()方法,
+然后调用者就可以通过IBinder和Service进行交互了,此后如果再次使用bindService绑定Service,
+系统不会创建新的Sevice实例,也不会再调用onBind()方法,只会直接把IBinder对象传递给其他后来增加的客户端!
+
+2.如果我们解除与服务的绑定,只需调用unbindService(),
+此时onUnbind和onDestory方法将会被调用!这是一个客户端的情况,假如是多个客户端绑定同一个Service的话,情况如下
+当一个客户完成和service之间的互动后，它调用 unbindService()
+方法来解除绑定。当所有的客户端都和service解除绑定后，系统会销毁service。（除非service也被startService()
+方法开启）
+3.另外,和上面那张情况不同,bindService模式下的Service是与调用者相互关联的,可以理解为 &quot;一条绳子上的蚂蚱&quot;,
+要死一起死,在bindService后,一旦调用者销毁,那么Service也立即终止!
+</code></pre><p>前台服务<br>    状态栏显示的Notification<br>    在自定义的Service类中，重写onCreate()，然后根据自己的需求定制Notification；<br>    定制完毕后，调用startForeground(1,notification对象)</p>
+<p>简单定时后台线程<br>    Step 1：获得Service: AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);<br>    Step 2：通过set方法设置定时任务 int anHour = 2 * 1000;<br>        long triggerAtTime = SystemClock.elapsedRealtime() + anHour;<br>        manager.set(AlarmManager.RTC_WAKEUP,triggerAtTime,pendingIntent);<br>    Step 3：定义一个Service 在onStartCommand中开辟一条事务线程,用于处理一些定时逻辑<br>    Step 4：定义一个Broadcast(广播)，用于启动Service 最后别忘了，在AndroidManifest.xml中<br>    对这Service与Boradcast进行注册！</p>
+<p>set(int type,long startTime,PendingIntent pi)<br>    type: 有五个可选值:<br>    AlarmManager.ELAPSED_REALTIME:<br>        闹钟在手机睡眠状态下不可用，该状态下闹钟使用相对时间（相对于系统启动开始），状态值为3;<br>    AlarmManager.ELAPSED_REALTIME_WAKEUP<br>        闹钟在睡眠状态下会唤醒系统并执行提示功能，该状态下闹钟也使用相对时间，状态值为2；<br>    AlarmManager.RTC<br>        闹钟在睡眠状态下不可用，该状态下闹钟使用绝对时间，即当前系统时间，状态值为1；<br>    AlarmManager.RTC_WAKEUP<br>        表示闹钟在睡眠状态下会唤醒系统并执行提示功能，该状态下闹钟使用绝对时间，状态值为0;<br>AlarmManager.POWER_OFF_WAKEUP<br>    表示闹钟在手机关机状态下也能正常进行提示功能，所以是5个状态中用的最多的状态之一，<br>    该状态下闹钟也是用绝对时间，状态值为4；不过本状态好像受SDK版本影响，某些版本并不支持；</p>
+<blockquote>
+<p>Binder     只有 IPC(跨进程通信) 没有多线程     多个应用程序<br>Messenger  只有 IPC 没有多线程<br>AIDL 实现两个进程间的简单通信<br>    IPC     多个应用程序    多线程</p>
+</blockquote>
+<pre><code>1.服务端
+
+    1.创建AIDL文件 IPerson.aidl
+    2.自定义Service类
+        1)继承Service类,同时也自定义了一个PersonQueryBinder类用来继承IPerson.Stub类 
+        就是实现了IPerson接口和IBinder接口
+        2)实例化自定义的Stub类,并重写Service的onBind方法,返回一个binder对象!
+
+2.客户端 
+    直接把服务端的那个aidl文件复制过来，然后我们直接在MainActivity中完成，和绑定本地Service的操作类似
+
+    1)自定义PersonConnection类实现ServiceConnection接口 
+    2)以PersonConnection对象作为参数,调用bindService绑定远程Service
+    3)和本地Service不同，绑定远程Service的ServiceConnection并不能直接获取Service的onBind( )方法 
+    返回的IBinder对象，只能返回onBind( )方法所返回的代理对象，需要做如下处理: 
+    iPerson = IPerson.Stub.asInterface(service); 
+
+
+数据类型：
+    基本类型
+    String
+    CharSequence
+    List
+    Map
+
+    复杂类型：
+        Parcelable接口
+
+        首先需要实现：writeToParcel和readFromPacel方法 写入方法将对象写入到包裹(parcel)中,
+        而读取方法则从包裹中读取对象, 请注意,写入属性顺序需与读取顺序相同
+
+        接着需要在：该类中添加一个名为CREATOR的static final属性 该属性需要实现：
+        android.os.Parcelable.Creator接口
+
+        再接着需要从写接口中的两个方法： createFromParcel(Parcel source)
+        方法:实现从source创建出JavaBean实例的功能 newArray(int size):创建一个类型为T,长度为size的数组,
+        只有一个简单的return new T[size]; (这里的T是Person类)
+
+        最后，describeContents():这个我也不知道是拿来干嘛的,直接返回0即可！不用理他
+        ——另外，非原始类型中，除了String和CharSequence以外，其余均需要一个方向指示符。 方向指示符包括
+         in、out、和inout。in表示由客户端设置，out表示由服务端设置，inout表示客户端和服务端都设置了该值。
+
+
+        public static final Parcelable.Creator&lt;Book&gt; CREATOR = new Creator&lt;Book&gt;() {  
+            public Book createFromParcel(Parcel source) {  
+                Book mBook = new Book();  
+                mBook.bookName = source.readString();  
+                mBook.author = source.readString();  
+                mBook.publishTime = source.readInt();  
+                return mBook;  
+            }  
+            public Book[] newArray(int size) {  
+                return new Book[size];  
+            }  
+        };  
+
+        public int describeContents() {  
+            return 0;  
+        }  
+        public void writeToParcel(Parcel parcel, int flags) {  
+            parcel.writeString(bookName);  
+            parcel.writeString(author);  
+            parcel.writeInt(publishTime);  
+        }  
+
+
+
+
+
+
+
+Android的后台就是指，它的运行是完全不依赖UI的。即使Activity被销毁，或者程序被关闭，
+只要进程还在，Service就可以继续运行。
+比如说一些应用程序，始终需要与服务器之间始终保持着心跳连接，就可以使用Service来实现。
+因为Activity很难对Thread进行控制，当Activity被销毁之后，就没有任何其它的办法
+可以再重新获取到之前创建的子线程的实例。
+而且在一个Activity中创建的子线程，另一个Activity无法对其进行操作。
+但是Service就不同了，所有的Activity都可以与Service进行关联，然后可以很方便地操作其中的方法，
+即使Activity被销毁了，之后只要重新与Service建立关联，就又能够获取到原有的Service中Binder的实例。
+因此，使用Service来处理后台任务，Activity就可以放心地finish，完全不需要担心无法对后台任务进行控制的情况。
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.png" alt="光与风与梦 WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/05/数据持久化/" rel="next" title="数据持久化">
+                <i class="fa fa-chevron-left"></i> 数据持久化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/05/Handler/" rel="prev" title="Handler">
+                Handler <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/05/Service/"
+           data-title="Service" data-url="http://jslancer.top/2016/10/05/Service/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.jpg"
+               alt="光与风与梦" />
+          <p class="site-author-name" itemprop="name">光与风与梦</p>
+          <p class="site-description motion-element" itemprop="description">年轻时不可止于温室，有梦想时不可止于饥寒。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建-Service"><span class="nav-number">1.</span> <span class="nav-text">创建 Service</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行-Service"><span class="nav-number">2.</span> <span class="nav-text">运行 Service</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#停止运行"><span class="nav-number">3.</span> <span class="nav-text">停止运行</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#绑定本地-Service"><span class="nav-number">3.1.</span> <span class="nav-text">绑定本地 Service</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#IntentService-Service-子类"><span class="nav-number">3.2.</span> <span class="nav-text">IntentService(Service 子类 )</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">光与风与梦</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jslancer"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
