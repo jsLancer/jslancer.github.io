@@ -1,0 +1,747 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|consolas:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="MongoDB," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="文档存储
+
+MongoDB 将数据存储为一个文档，数据结构由键值(key=&amp;gt;value)对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。
+
+安装1D:\DataBase\mongoDB\bin&amp;gt;mongod.exe --dbpath=D:\DataBase\data\db --logpath=D:\DataBase\data\log.txt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mongodb入门">
+<meta property="og:url" content="http://jslancer.top/2017/02/26/mongodb入门/index.html">
+<meta property="og:site_name" content="jsLancer的博客">
+<meta property="og:description" content="文档存储
+
+MongoDB 将数据存储为一个文档，数据结构由键值(key=&amp;gt;value)对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。
+
+安装1D:\DataBase\mongoDB\bin&amp;gt;mongod.exe --dbpath=D:\DataBase\data\db --logpath=D:\DataBase\data\log.txt">
+<meta property="og:updated_time" content="2017-03-07T14:12:12.615Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mongodb入门">
+<meta name="twitter:description" content="文档存储
+
+MongoDB 将数据存储为一个文档，数据结构由键值(key=&amp;gt;value)对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。
+
+安装1D:\DataBase\mongoDB\bin&amp;gt;mongod.exe --dbpath=D:\DataBase\data\db --logpath=D:\DataBase\data\log.txt">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jslancer.top/2017/02/26/mongodb入门/"/>
+
+
+
+
+
+  <title> Mongodb入门 | jsLancer的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">jsLancer的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">笔记分享</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://jslancer.top/2017/02/26/mongodb入门/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="光与风与梦">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="jsLancer的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="jsLancer的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mongodb入门
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T14:06:08+08:00">
+                2017-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DataBase/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2017/02/26/mongodb入门/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/26/mongodb入门/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>文档存储</p>
+<blockquote>
+<p>MongoDB 将数据存储为一个文档，数据结构由键值(key=&gt;value)对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。</p>
+</blockquote>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">D:\DataBase\mongoDB\bin&gt;mongod.exe --dbpath=D:\DataBase\data\db --logpath=D:\DataBase\data\log.txt --install</div></pre></td></tr></table></figure>
+<h5 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h5><h5 id="连接服务"><a href="#连接服务" class="headerlink" title="连接服务"></a>连接服务</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">D:\DataBase\mongoDB\bin&gt;mongo.exe</div><div class="line"></div><div class="line">MongoDB shell version v3.4.2</div><div class="line">connecting to: mongodb://127.0.0.1:27017</div><div class="line">MongoDB server version: 3.4.2</div><div class="line">Welcome to the MongoDB shell.</div></pre></td></tr></table></figure>
+<h5 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">D:\DataBase\mongoDB\bin&gt;mongod.exe --dbpath=D:\DataBase\data\db --logpath=D:\DataBase\data\log.txt --remove</div></pre></td></tr></table></figure>
+<h6 id="保留数据库"><a href="#保留数据库" class="headerlink" title="保留数据库"></a>保留数据库</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">admin:&quot;root&quot;数据库，要是将一个用户添加到这个数据库，这个用户自动继承所有数据库的权限</div><div class="line">local</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">SQL术语/概念    MongoDB术语/概念    解释/说明</div><div class="line">database        database	    数据库</div><div class="line">table	        collection	    数据库表/集合</div><div class="line">row	        document	    数据记录行/文档</div><div class="line">column	        field   	    数据字段/域</div><div class="line">index	        index	            索引</div><div class="line">table           joins	 	    表连接,MongoDB不支持</div><div class="line">primary key	primary key	    主键,MongoDB自动将_id字段设置为主键</div></pre></td></tr></table></figure>
+<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">显示所有数据库</div><div class="line">show dbs</div><div class="line"></div><div class="line">创建数据库</div><div class="line">use databaseName</div><div class="line"></div><div class="line">获取当前数据库名称</div><div class="line">db.getName()</div><div class="line"></div><div class="line">查看数据库状态</div><div class="line">db.stats()</div><div class="line"></div><div class="line">帮助命令</div><div class="line">db.help()</div></pre></td></tr></table></figure>
+<h5 id="1-数据写入"><a href="#1-数据写入" class="headerlink" title="1. 数据写入"></a>1. 数据写入</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">普通数据添加</div><div class="line">db.user.insert(&#123;username:&apos;juno&apos;,password:&apos;123&apos;&#125;)</div><div class="line"></div><div class="line">多维数据对象添加</div><div class="line">db.user.insert(&#123;username:&apos;lancer&apos;,password:&apos;456&apos;,address:&#123;province:&apos;山东&apos;,city:&apos;青岛&apos;&#125;&#125;)</div><div class="line"></div><div class="line">数组信息添加</div><div class="line">db.user.insert(&#123;username:&apos;lancer&apos;,password:&apos;456&apos;,friends:[&apos;saber&apos;,&apos;juno&apos;]&#125;)</div></pre></td></tr></table></figure>
+<h5 id="2-数据查询"><a href="#2-数据查询" class="headerlink" title="2. 数据查询"></a>2. 数据查询</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">查找数据表所有数据</div><div class="line">db.user.find()</div><div class="line"></div><div class="line">查询数据表第一条数据</div><div class="line">db.user.findOne()</div><div class="line"></div><div class="line">条件查询</div><div class="line">db.user.find(&#123;username:&apos;lancer&apos;&#125;)</div><div class="line"></div><div class="line">范围条件查询</div><div class="line">$gt     &gt;</div><div class="line">$lt     &lt;</div><div class="line">$gte    &gt;=</div><div class="line">$lte    &lt;=</div><div class="line"></div><div class="line">db.user.find(&#123;username:&#123;&apos;$gt&apos;:&apos;l&apos;&#125;&#125;)</div><div class="line">多个查询条件</div><div class="line">db.user.find(&#123;username:&#123;&apos;$gt&apos;:&apos;l&apos;&#125;,password:&#123;&apos;$lt&apos;:&apos;2&apos;&#125;&#125;)</div><div class="line"></div><div class="line">多维字段查询</div><div class="line">db.user.find(&#123;&apos;address.province&apos;:&apos;山东&apos;&#125;)</div><div class="line"></div><div class="line">数组条件查询</div><div class="line">db.user.find(&#123;&apos;friends&apos;:&apos;saber&apos;&#125;)</div><div class="line">db.user.find(&#123;friends:&#123;&apos;$all&apos;:[&apos;saber&apos;]&#125;&#125;)</div><div class="line"></div><div class="line"></div><div class="line">$or 多个条件，满足其一即可</div><div class="line"></div><div class="line"></div><div class="line">限制查询</div><div class="line">1 查询此字段</div><div class="line">0 排除此字段</div><div class="line">db.user.find(&#123;username:&apos;lancer&apos;&#125;,&#123;username:1,password:1&#125;)</div><div class="line">要0都是0,1都是1</div><div class="line">db.user.find(&#123;username:&apos;lancer&apos;&#125;,&#123;username:0,password:0&#125;)</div></pre></td></tr></table></figure>
+<h5 id="3-数据更新"><a href="#3-数据更新" class="headerlink" title="3. 数据更新"></a>3. 数据更新</h5><ol>
+<li><p>有 $set 的修改：只修改设置的字段，其他字段不变化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.user.update(&#123;username:&apos;saber&apos;&#125;,&#123;&apos;$set&apos;:&#123;password:&apos;111&apos;&#125;&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>没有 $set 的修改：只修改设置的字段，没有修改的字段就删除了（除了_id字段）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">db.user.update(&#123;username:&apos;saber&apos;&#125;,&#123;username:&apos;saber1&apos;&#125;)</div><div class="line">password字段删除</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>字段有则直接修改，没有则添加为新字段</p>
+<h5 id="4-数据删除"><a href="#4-数据删除" class="headerlink" title="4. 数据删除"></a>4. 数据删除</h5><ol>
+<li>删除记录</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.user.remove(&#123;username:&apos;saber1&apos;&#125;)</div></pre></td></tr></table></figure>
+<ol>
+<li>删除字段<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">db.user.update(&#123;username:&apos;saber&apos;&#125;,&#123;&apos;$unset&apos;:&#123;age:0&#125;&#125;)</div><div class="line">0和1都可以</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="账号权限"><a href="#账号权限" class="headerlink" title="账号权限"></a>账号权限</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">use admin</div><div class="line"></div><div class="line">db.createUser(&#123;user:&apos;root&apos;,pwd:&apos;123&apos;,roles:[&#123;role:&apos;userAdminAnyDatabase&apos;,db:&apos;admin&apos;&#125;]&#125;)</div><div class="line"></div><div class="line">Successfully added user: &#123;</div><div class="line">        &quot;user&quot; : &quot;root&quot;,</div><div class="line">        &quot;roles&quot; : [</div><div class="line">                &#123;</div><div class="line">                        &quot;role&quot; : &quot;userAdminAnyDatabase&quot;,</div><div class="line">                        &quot;db&quot; : &quot;admin&quot;</div><div class="line">                &#125;</div><div class="line">        ]</div><div class="line">&#125;</div><div class="line"></div><div class="line">db.auth(&apos;root&apos;,&apos;123&apos;)</div><div class="line"></div><div class="line">db.logout()</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.png" alt="光与风与梦 WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MongoDB/" rel="tag"># MongoDB</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/19/MVP/" rel="next" title="MVP">
+                <i class="fa fa-chevron-left"></i> MVP
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/26/mongodb入门/"
+           data-title="Mongodb入门" data-url="http://jslancer.top/2017/02/26/mongodb入门/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.jpg"
+               alt="光与风与梦" />
+          <p class="site-author-name" itemprop="name">光与风与梦</p>
+          <p class="site-description motion-element" itemprop="description">年轻时不可浸于温室，有梦想时不可止于饥寒。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#启动服务"><span class="nav-number">1.1.</span> <span class="nav-text">启动服务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#连接服务"><span class="nav-number">1.2.</span> <span class="nav-text">连接服务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#卸载"><span class="nav-number">1.3.</span> <span class="nav-text">卸载</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#保留数据库"><span class="nav-number">1.3.1.</span> <span class="nav-text">保留数据库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令"><span class="nav-number">2.</span> <span class="nav-text">命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-数据写入"><span class="nav-number">2.1.</span> <span class="nav-text">1. 数据写入</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-数据查询"><span class="nav-number">2.2.</span> <span class="nav-text">2. 数据查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-数据更新"><span class="nav-number">2.3.</span> <span class="nav-text">3. 数据更新</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-数据删除"><span class="nav-number">2.4.</span> <span class="nav-text">4. 数据删除</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#账号权限"><span class="nav-number">3.</span> <span class="nav-text">账号权限</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">光与风与梦</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jslancer"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
