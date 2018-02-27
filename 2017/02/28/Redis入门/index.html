@@ -1,0 +1,755 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|consolas:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Redis," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="基于 key-value 存储的 nosql 数据库
+支持 string,set,hash,sort set,list 类型，基于内存，支持数据持久化
+
+官网
+中文社区
+windows版本下载地址
+1234567891011121314开启服务端redis-server.exe redis.windows.conf端口：6379ctril+c 终止服务开启客户端redis-cli.exe -h">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis入门">
+<meta property="og:url" content="http://jslancer.top/2017/02/28/Redis入门/index.html">
+<meta property="og:site_name" content="jsLancer的博客">
+<meta property="og:description" content="基于 key-value 存储的 nosql 数据库
+支持 string,set,hash,sort set,list 类型，基于内存，支持数据持久化
+
+官网
+中文社区
+windows版本下载地址
+1234567891011121314开启服务端redis-server.exe redis.windows.conf端口：6379ctril+c 终止服务开启客户端redis-cli.exe -h">
+<meta property="og:updated_time" content="2018-02-24T10:08:04.446Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis入门">
+<meta name="twitter:description" content="基于 key-value 存储的 nosql 数据库
+支持 string,set,hash,sort set,list 类型，基于内存，支持数据持久化
+
+官网
+中文社区
+windows版本下载地址
+1234567891011121314开启服务端redis-server.exe redis.windows.conf端口：6379ctril+c 终止服务开启客户端redis-cli.exe -h">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jslancer.top/2017/02/28/Redis入门/"/>
+
+
+
+
+
+  <title> Redis入门 | jsLancer的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">jsLancer的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">笔记分享</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://jslancer.top/2017/02/28/Redis入门/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="光与风与梦">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/icon.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="jsLancer的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="jsLancer的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redis入门
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-28T14:06:08+08:00">
+                2017-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DataBase/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2017/02/28/Redis入门/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/28/Redis入门/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>基于 key-value 存储的 nosql 数据库</p>
+<p>支持 string,set,hash,sort set,list 类型，基于内存，支持数据持久化</p>
+</blockquote>
+<p><a href="https://redis.io" target="_blank" rel="external">官网</a></p>
+<p><a href="http://www.redis.cn/" target="_blank" rel="external">中文社区</a></p>
+<p><a href="https://github.com/MSOpenTech/redis/releases" target="_blank" rel="external">windows版本下载地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">开启服务端</div><div class="line">redis-server.exe redis.windows.conf</div><div class="line">端口：6379</div><div class="line">ctril+c 终止服务</div><div class="line"></div><div class="line"></div><div class="line">开启客户端</div><div class="line">redis-cli.exe -h 127.0.0.1 -p 6379</div><div class="line"></div><div class="line">D:\DataBase\redis&gt;redis-cli.exe -h 127.0.0.1 -p 6379</div><div class="line">127.0.0.1:6379&gt; set mykey abc</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; get mykey</div><div class="line">&quot;abc&quot;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><h5 id="string"><a href="#string" class="headerlink" title="string"></a>string</h5><p>字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; set age 18</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; get age</div><div class="line">&quot;18&quot;</div><div class="line">127.0.0.1:6379&gt; incr age  //自增</div><div class="line">(integer) 19</div><div class="line">127.0.0.1:6379&gt; get age</div><div class="line">&quot;19&quot;</div><div class="line">127.0.0.1:6379&gt; decr age  //自减</div><div class="line">(integer) 18</div><div class="line"></div><div class="line">127.0.0.1:6379&gt; incrby age 2</div><div class="line">(integer) 20</div><div class="line">127.0.0.1:6379&gt; decrby age 2</div><div class="line">(integer) 18</div><div class="line">127.0.0.1:6379&gt; keys *    //获取所有key</div><div class="line">1) &quot;age&quot;</div><div class="line">2) &quot;mykey&quot;</div></pre></td></tr></table></figure>
+<h6 id="mysql-与-redis-映射"><a href="#mysql-与-redis-映射" class="headerlink" title="mysql 与 redis 映射"></a>mysql 与 redis 映射</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">mysql</div><div class="line">id      username        password</div><div class="line">1       juno            123</div><div class="line">2       jake            456</div><div class="line"></div><div class="line">127.0.0.1:6379&gt; set user:id:1:username juno</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; set user:id:1:password 123</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; set user:id:2:username jake</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; set user:id:2:password 456</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; keys user:id:1*</div><div class="line">1) &quot;user:id:1:username&quot;</div><div class="line">2) &quot;user:id:1:password&quot;</div><div class="line">127.0.0.1:6379&gt; get user:id:1:username</div><div class="line">&quot;juno&quot;</div><div class="line">127.0.0.1:6379&gt; get user:id:1:password</div><div class="line">&quot;123&quot;</div></pre></td></tr></table></figure>
+<h5 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h5><blockquote>
+<p>Redis hash是一个string类型的field和value的映射表，hash特别适合用于存储对象。</p>
+</blockquote>
+<p>map型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; hset user name lancer</div><div class="line">(integer) 1     //设置单个值</div><div class="line">127.0.0.1:6379&gt; hget user name</div><div class="line">&quot;lancer&quot;</div><div class="line">127.0.0.1:6379&gt; hmset user age 12 password 123     //设置多个值</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; hget user age</div><div class="line">&quot;12&quot;</div><div class="line">127.0.0.1:6379&gt; hget user password</div><div class="line">&quot;123&quot;</div><div class="line">127.0.0.1:6379&gt; hgetall user  //获取所有值</div><div class="line">1) &quot;name&quot;</div><div class="line">2) &quot;lancer&quot;</div><div class="line">3) &quot;age&quot;</div><div class="line">4) &quot;12&quot;</div><div class="line">5) &quot;password&quot;</div><div class="line">6) &quot;123&quot;</div></pre></td></tr></table></figure>
+<h5 id="list"><a href="#list" class="headerlink" title="list"></a>list</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; lpush link A  //left push</div><div class="line">(integer) 1</div><div class="line">127.0.0.1:6379&gt; lpush link B</div><div class="line">(integer) 2</div><div class="line">127.0.0.1:6379&gt; lpush link C</div><div class="line">(integer) 3</div><div class="line">127.0.0.1:6379&gt; rpush link 0   //right push</div><div class="line">(integer) 4</div><div class="line">127.0.0.1:6379&gt; lrange link 0 -1  //0起始下标 -1最后下标</div><div class="line">1) &quot;C&quot;</div><div class="line">2) &quot;B&quot;</div><div class="line">3) &quot;A&quot;</div><div class="line">4) &quot;0&quot;</div><div class="line">127.0.0.1:6379&gt; lpop link</div><div class="line">&quot;C&quot;</div><div class="line">127.0.0.1:6379&gt; rpop link</div><div class="line">&quot;0&quot;</div></pre></td></tr></table></figure>
+<h5 id="set"><a href="#set" class="headerlink" title="set"></a>set</h5><p>无序，唯一<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; sadd set1 1 2 3  //向集合添加元素</div><div class="line">(integer) 3</div><div class="line">127.0.0.1:6379&gt; sadd set1 3</div><div class="line">(integer) 0</div><div class="line">127.0.0.1:6379&gt; sadd set1 4</div><div class="line">(integer) 1</div><div class="line">127.0.0.1:6379&gt; smembers set1   //获取集合元素</div><div class="line">1) &quot;1&quot;</div><div class="line">2) &quot;2&quot;</div><div class="line">3) &quot;3&quot;</div><div class="line">4) &quot;4&quot;</div><div class="line"></div><div class="line">127.0.0.1:6379&gt; srem set1 1     //移除元素</div><div class="line">(integer) 1</div><div class="line"></div><div class="line">127.0.0.1:6379&gt; spop set1  //随机pop出元素[count] 数量</div><div class="line">&quot;2&quot;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; set user:id:3:username saber</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; set user:id:3:password 789</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; sadd set:user:id:3:friend 1 2</div><div class="line">(integer) 2</div><div class="line">127.0.0.1:6379&gt; smembers set:user:id:3:friend</div><div class="line">1) &quot;1&quot;</div><div class="line">2) &quot;2&quot;</div><div class="line">127.0.0.1:6379&gt; set user:id:4:username lancer</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; set user:id:4:password 123</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; sadd set:user:id:4:friend 3</div><div class="line">(integer) 1</div><div class="line">127.0.0.1:6379&gt; sadd set:user:id:4:friend 2</div><div class="line">(integer) 1</div><div class="line">127.0.0.1:6379&gt; sinter set:user:id:3:friend set:user:id:4:friend    //差集</div><div class="line">1) &quot;2&quot;</div><div class="line">127.0.0.1:6379&gt; sunion set:user:id:3:friend set:user:id:4:friend    //并集</div><div class="line">1) &quot;1&quot;</div><div class="line">2) &quot;2&quot;</div><div class="line">3) &quot;3&quot;</div><div class="line">127.0.0.1:6379&gt; sdiff set:user:id:3:friend set:user:id:4:friend     //差集</div><div class="line">1) &quot;1&quot;</div></pre></td></tr></table></figure>
+<h6 id="zset"><a href="#zset" class="headerlink" title="zset"></a>zset</h6><p>有序，唯一</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; zadd class:java 5 saber</div><div class="line">(integer) 1</div><div class="line">127.0.0.1:6379&gt; zadd class:java 10 lancer</div><div class="line">(integer) 1</div><div class="line">127.0.0.1:6379&gt; zadd class:java 6 juno</div><div class="line">(integer) 1</div><div class="line">127.0.0.1:6379&gt; zadd class:java 3 jake</div><div class="line">(integer) 1</div><div class="line">127.0.0.1:6379&gt; zadd class:java 1 lily</div><div class="line">(integer) 1</div><div class="line">127.0.0.1:6379&gt; zrange classﾣJava 0 -1</div><div class="line">(empty list or set)</div><div class="line">127.0.0.1:6379&gt; zrange class:java 0 -1</div><div class="line">1) &quot;lily&quot;</div><div class="line">2) &quot;jake&quot;</div><div class="line">3) &quot;saber&quot;</div><div class="line">4) &quot;juno&quot;</div><div class="line">5) &quot;lancer&quot;</div><div class="line">127.0.0.1:6379&gt; zrange class:java 0 -1 withscores</div><div class="line"> 1) &quot;lily&quot;</div><div class="line"> 2) &quot;1&quot;</div><div class="line"> 3) &quot;jake&quot;</div><div class="line"> 4) &quot;3&quot;</div><div class="line"> 5) &quot;saber&quot;</div><div class="line"> 6) &quot;5&quot;</div><div class="line"> 7) &quot;juno&quot;</div><div class="line"> 8) &quot;6&quot;</div><div class="line"> 9) &quot;lancer&quot;</div><div class="line">10) &quot;10&quot;</div></pre></td></tr></table></figure>
+<h5 id="持久化功能"><a href="#持久化功能" class="headerlink" title="持久化功能"></a>持久化功能</h5><ol>
+<li>基于快照的方式：redis按照一定的周期把内存里面的数据同步到磁盘文件</li>
+<li>基于日志文件的追加：redis 会把对数据造成更改的命令记录到日志文件里面，重启时，执行日志文件里面对 redis 写操作，数据还原。</li>
+</ol>
+<h6 id="基于快照的方式"><a href="#基于快照的方式" class="headerlink" title="基于快照的方式"></a>基于快照的方式</h6><p>redis.windows.conf 配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">save 900 1</div><div class="line">save 300 10</div><div class="line">save 60 10000</div><div class="line"></div><div class="line">在900s内，对redis的key进行过一次操作，则会把内存里面的数据同步到磁盘文件</div><div class="line">在300s内，对redis的key进行过十次操作，则会把内存里面的数据同步到磁盘文件</div><div class="line">在60s内，对redis的key进行过一万次操作，则会把内存里面的数据同步到磁盘文件</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">dbfilename dump.rdb</div><div class="line">存储文件名</div><div class="line">dir ./</div><div class="line">存储目录</div><div class="line"></div><div class="line">bgsave</div><div class="line">手动触发快照持久化</div></pre></td></tr></table></figure></p>
+<h6 id="基于文件追加方式持久化"><a href="#基于文件追加方式持久化" class="headerlink" title="基于文件追加方式持久化"></a>基于文件追加方式持久化</h6><p>修改redis.windows.conf 配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">appendonly yes</div><div class="line">开启基于文件追加方式持久化</div><div class="line"></div><div class="line">appendfilename &quot;appendonly.aof&quot;</div><div class="line">文件名</div><div class="line"></div><div class="line"># appendfsync always</div><div class="line">appendfsync everysec</div><div class="line"># appendfsync no</div><div class="line">备份文件的周期</div><div class="line">always      只要存在对redis数据造成更改的操作，都记录到磁盘文件</div><div class="line">everysec    每1s中进行一次把对redis数据造成更改的操作，记录到磁盘文件上</div><div class="line">no          完全交给操作系统完成</div></pre></td></tr></table></figure></p>
+<p><a href="http://www.runoob.com/redis/redis-conf.html" target="_blank" rel="external">配置详解</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.png" alt="光与风与梦 WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag"># Redis</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/26/mongodb入门/" rel="next" title="Mongodb入门">
+                <i class="fa fa-chevron-left"></i> Mongodb入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/01/注解/" rel="prev" title="注解">
+                注解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/28/Redis入门/"
+           data-title="Redis入门" data-url="http://jslancer.top/2017/02/28/Redis入门/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/icon.jpg"
+               alt="光与风与梦" />
+          <p class="site-author-name" itemprop="name">光与风与梦</p>
+          <p class="site-description motion-element" itemprop="description">年轻时不可浸于温室，有梦想时不可止于饥寒。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据类型"><span class="nav-number">1.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#string"><span class="nav-number">1.1.</span> <span class="nav-text">string</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#mysql-与-redis-映射"><span class="nav-number">1.1.1.</span> <span class="nav-text">mysql 与 redis 映射</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hash"><span class="nav-number">1.2.</span> <span class="nav-text">hash</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#list"><span class="nav-number">1.3.</span> <span class="nav-text">list</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#set"><span class="nav-number">1.4.</span> <span class="nav-text">set</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#zset"><span class="nav-number">1.4.1.</span> <span class="nav-text">zset</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#持久化功能"><span class="nav-number">1.5.</span> <span class="nav-text">持久化功能</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#基于快照的方式"><span class="nav-number">1.5.1.</span> <span class="nav-text">基于快照的方式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#基于文件追加方式持久化"><span class="nav-number">1.5.2.</span> <span class="nav-text">基于文件追加方式持久化</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">光与风与梦</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jslancer"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
